@@ -1,0 +1,76 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SNLP Assignment 1 LaTeX Template
+% Based on requirements from SNLP_Assignment1.pdf
+% Features: 3 author slots, sections for Q1 & Q2 with subsections.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass{article}
+\usepackage[final]{neurips_2024} % Or use [preprint]
+% --- PACKAGE IMPORTS ---
+\usepackage[utf8]{inputenc} % Input encoding (UTF-8 recommended)
+\usepackage[T1]{fontenc}    % Font encoding
+\usepackage{amsmath}        % AMS mathematical facilities
+\usepackage{amssymb}        % AMS mathematical symbols
+\usepackage{amsfonts}       % AMS mathematical fonts
+\usepackage{graphicx}       % Include graphics (e.g., for plots in Q2)
+\usepackage{hyperref}       % Create hyperlinks in the PDF (optional, but good practice)
+\usepackage[margin=1in]{geometry} % Set margins (1 inch is common)
+
+% --- TITLE BLOCK INFORMATION ---
+\title{SNLP Assignment 1: Python and probability basics, Zipf's and Mandelbrot's Law} % Clearly state assignment title
+
+% --- Authorship ---
+% Use \author{} for each author and \affil{} for their NetID.
+% The numbers [1], [2], [3] link authors to their NetIDs.
+\author{
+  Author One Name \\
+  Student ID: replace\_with\_id1 \\ % Note: Escape underscore if needed in actual ID
+  \texttt{replace\_with\_email1} \\
+  \And % Use \And to separate authors
+  Zichao Wei \\
+  Student ID: 7063941 \\
+  Saarland University \\
+  \texttt{ziwe00001@stud.uni-saarland.de} \\
+  \And % Use \And to separate authors
+  Author Three Name \\
+  Student ID: replace\_with\_id3 \\ % Note: Escape underscore if needed in actual ID
+  \texttt{replace\_with\_email3} \\
+}
+
+
+\date{\today} % You can replace \today with the due date, e.g., \date{February 23, 2024}
+
+% --- DOCUMENT START ---
+\begin{document}
+
+\maketitle % Display the title, authors, and date
+
+% --- ASSIGNMENT CONTENT ---
+
+\section{Question 1: Probability Basics}
+% --- End Answer Q1(c) ---
+
+
+\section{Question 2: Zipf’s Law}
+\textit{Make sure to clearly answer each part, providing explanations, calculations, or code snippets/results as required.}
+
+\subsection{Part (a)}
+% --- Begin Answer Q2(a) ---
+
+Zipf's law is an empirical formula that describes the frequency and order of occurrence of words in a language. Specifically, words are sroted by frequency, then the word frequency is inversely proportional to the rank of the words in the sequence.
+% --- End Answer Q2(a) ---
+
+\subsection{Part (b)}
+% --- Begin Answer Q2(b) ---
+
+Zipf's law is considered to be universal among natural languages, some artficial languages(like Esperanto), and programming languages(like C-Program). Besides, some recent research reports that the output of some generative models also follows Zipf's law.
+
+\subsection{Part (c)}
+% --- Begin Answer Q2(c) ---
+
+One of the biggest limitations of Zipf's law is that it doesn't have a very sound theoretical foundation. It is an empirical observation rather than a derived law. Although there are some theoretical models that try to explain it, like the principle of least effort, we still cannot say for sure why it holds for so many languages. Besides, Zipf's law is not a strict law; it is more of a tendency. The type, properties, and size of the corpus can all affect the degree to which Zipf's law holds, like in many Asian languages, the rank-frequency distribution shows very different patterns from that of English, which still needs to be explained.
+% --- End Answer Q2(c) ---
+
+
+% --- DOCUMENT END ---
+\end{document}
