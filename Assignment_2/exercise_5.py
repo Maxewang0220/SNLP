@@ -1,5 +1,5 @@
 import random
-
+import math
 
 class MillersModel:
     """Implements the Miller's Model"""
@@ -70,4 +70,12 @@ class MillersModel:
 
         # your code here
 
-        raise NotImplementedError
+        sum_log_p = 0
+
+        for char in text:
+            log_p = math.log(self.get_prob(char), math.e)
+            sum_log_p += log_p
+        
+        ppl = math.exp(-sum_log_p / len(text))
+        return ppl
+
