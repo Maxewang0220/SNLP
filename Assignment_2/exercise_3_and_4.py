@@ -109,6 +109,7 @@ def plot_top_n(top_n_dict: dict):
         plt.show()
 
 
+
 def get_perplexity(bigram_str):
     words = bigram_str.lower().split()
     if len(words) != 2:
@@ -117,7 +118,8 @@ def get_perplexity(bigram_str):
     w1, w2 = words[0], words[1]
     target_bigram = (w1, w2)
 
-    bigram_freqs = get_bigram_freqs(words)
+    corpus = load_corpus()
+    bigram_freqs = get_bigram_freqs(corpus)
     context_word_count = sum(count for (word1, word2), count in bigram_freqs.items() if word1 == w1)
 
     if context_word_count == 0:
@@ -141,7 +143,8 @@ def get_mean_rank(bigram_str):
         raise ValueError("Input must be a string with exactly two words.")
 
     w1, w2 = words[0], words[1]
-    bigram_freqs = get_bigram_freqs(words)
+    corpus = load_corpus()
+    bigram_freqs = get_bigram_freqs(corpus)
     context_word_count = sum(count for (word1, word2), count in bigram_freqs.items() if word1 == w1)
 
     if context_word_count == 0:
