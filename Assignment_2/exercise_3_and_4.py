@@ -1,6 +1,9 @@
 # TODO: Add your necessary imports here
+from itertools import count
 from typing import Union
 from unittest import result
+
+from sympy import per
 
 from arrow import get
 import numpy as np
@@ -106,11 +109,64 @@ def plot_top_n(top_n_dict: dict):
         plt.show()
 
 
+def get_perplexity(bigram_str):
+    words = bigram_str.lower().split()
+    if len(words) != 2:
+        raise ValueError("Input must be a string with exactly two words.")
+
+    w1, w2 = words[0], words[1]
+    target_bigram = (w1, w2)
+
+    bigram_freqs = get_bigram_freqs(words)
+    context_word_count = sum(count for (word1, word2), count in bigram_freqs.items() if word1 == w1)
+
+    if context_word_count == 0:
+        return np.inf
+
+    bigram_count = bigram_freqs.get(target_bigram, 0)
+
+    if bigram_count == 0:
+        return np.inf
+
+    prob = bigram_count / context_word_count
+
+    perplexity = 1 / prob if prob > 0 else np.inf
+
+    return perplexity
 
 
-def get_perplexity():
-    raise NotImplementedError
+def get_mean_rank(bigram_str):
+    words = bigram_str.lower().split()
+    if len(words) != 2:
+        raise ValueError("Input must be a string with exactly two words.")
 
+    w1, w2 = words[0], words[1]
+    bigram_freqs = get_bigram_freqs(words)
+    context_word_count = sum(count for (word1, word2), count in bigram_freqs.items() if word1 == w1)
 
-def get_mean_rank():
-    raise NotImplementedError
+    if context_word_count == 0:
+        return np.inf
+
+    following_word_count = {}
+
+    for (bw1, bw2), count in bigram_freqs.items():
+        if bw1 == w1:
+            following_word_count[bw2] = count
+
+    if not following_word_count:
+        return np.inf
+
+    sorted_words = sorted(following_word_count.items(), key=lambda x: x[1], reverse=True)
+
+    rank = 1
+    found = False
+    for word, count in sorted_words:
+        if word == w2:
+            found = True
+            break
+        rank += 1
+
+    if found:
+        return rank
+    else:
+        return np.inf
