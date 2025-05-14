@@ -1,6 +1,5 @@
 import math
 from collections import Counter
-import token
 from typing import List, Union
 
 from tokenizers import Tokenizer
@@ -18,10 +17,12 @@ class TokenizerEntropy:
 
         returns a list of tokens
         """
+        # ====================================
+        # Your code here
 
+        # ====================================
         encoding = tokenizer.encode(text)
-        tokens = encoding.tokens
-        return tokens
+        return encoding.tokens
 
     def tokenize_morfessor(self, tokenizer: BaselineModel, text: str) -> List[str]:
         """
@@ -33,15 +34,19 @@ class TokenizerEntropy:
 
         returns a list of tokens
         """
+        # ====================================
+        # Your code here
 
+        # ====================================
+        words = text.split()
         tokens = []
-        for word in text.split():
-            if word:
-                # get the morfessor tokens
-                segments = tokenizer.viterbi_segment(word)
-                # get the morfessor tokens
-                tokens.extend(segments[0])
+
+        for word in words:
+            segments = tokenizer.viterbi_segment(word)[0]
+            tokens.extend(segments)
+
         return tokens
+
     def get_probs(self, tokens: List[str]):
         """
         Takes a list of tokens and compute the probability distribution of the tokens.
@@ -51,10 +56,15 @@ class TokenizerEntropy:
 
         returns a dictionary of token probabilities i.e. {token: probability, ...}
         """
+        # ====================================
+        # Your code here
+
+        # ====================================
+        token_size = len(tokens)
         token_counts = Counter(tokens)
-        total_count = len(tokens)
-        probs = {token: count / total_count for token, count in token_counts.items()}
-        return probs
+
+        token_probs = {token: count/token_size for token, count in token_counts.items()}
+        return token_probs
 
     def compute_entropy(
         self, text: str, tokenizer: Union[Tokenizer, BaselineModel]
@@ -76,8 +86,13 @@ class TokenizerEntropy:
         else:
             raise ValueError("Tokenizer not supported.")
 
-        # get the probabilities of the tokens
-        probs = self.get_probs(tokens)
-        # compute the entropy
-        entropy = -sum(p * math.log2(p) for p in probs.values())
+        # ====================================
+        # Your code here
+
+        # get the probabilities of each token
+        token_probs = self.get_probs(tokens)
+        # Compute the entropy
+        entropy = -sum(p * math.log2(p) for p in token_probs.values())
+
         return entropy
+        # ====================================
