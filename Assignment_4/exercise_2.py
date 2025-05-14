@@ -19,10 +19,11 @@ class TokenizerEntropy:
         """
         # ====================================
         # Your code here
-
+        
         # ====================================
-        raise NotImplementedError
-
+        encoding = tokenizer.encode(text)
+        return encoding.tokens
+    
     def tokenize_morfessor(self, tokenizer: BaselineModel, text: str) -> List[str]:
         """
         Takes the Morfessor tokenizer and a text and returns the list of tokens.
@@ -37,7 +38,14 @@ class TokenizerEntropy:
         # Your code here
 
         # ====================================
-        raise NotImplementedError
+        words = text.split()
+        tokens = []
+
+        for word in words:
+            segments = tokenizer.viterbi_segment(word)[0]
+            tokens.extend(segments)
+            
+        return tokens
 
     def get_probs(self, tokens: List[str]):
         """
@@ -52,7 +60,11 @@ class TokenizerEntropy:
         # Your code here
 
         # ====================================
-        raise NotImplementedError
+        token_size = len(tokens)
+        token_counts = Counter(tokens)
+        
+        token_probs = {token: count/token_size for token, count in token_counts.items()}
+        return token_probs
 
     def compute_entropy(
         self, text: str, tokenizer: Union[Tokenizer, BaselineModel]
@@ -78,8 +90,10 @@ class TokenizerEntropy:
         # Your code here
 
         # get the probabilities of each token
-
+        token_probs = self.get_probs(tokens)
         # Compute the entropy
+        entropy = -sum(p * math.log2(p) for p in token_probs.values())
 
+        return entropy
         # ====================================
-        raise NotImplementedError
+        
