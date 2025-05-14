@@ -34,14 +34,14 @@ class TokenizerEntropy:
         returns a list of tokens
         """
 
-        all_subtokens = []
+        tokens = []
         for word in text.split():
             if word:
                 # get the morfessor tokens
-                morfessor_tokens = tokenizer.get_morphemes(word)
-                all_subtokens.extend(morfessor_tokens)
-        return all_subtokens
-
+                segments = tokenizer.viterbi_segment(word)
+                # get the morfessor tokens
+                tokens.extend(segments[0])
+        return tokens
     def get_probs(self, tokens: List[str]):
         """
         Takes a list of tokens and compute the probability distribution of the tokens.
