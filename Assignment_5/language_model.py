@@ -56,4 +56,17 @@ class NGramLM:
         2. Checks if relative frequencies sum to 1 (within tolerance)
         3. Calculates Perplexity i.e. 2 raised to the power of cross-entropy
         """
-        raise NotImplementedError
+
+        # Generate test n-grams
+        test_ngrams = self.get_n_grams(test_tokens, self.N)
+        M = len(test_ngrams)
+        # Compute log2 probabilities for each n-gram
+        log_probs = []
+        for ng in test_ngrams:
+            p = self.get_smoothed_prob(ng)
+            log_probs.append(np.log2(p))
+        # Cross-entropy H = -1/M * sum log2 p
+        H = -np.sum(log_probs) / M
+        # Perplexity = 2^H
+        perp = 2 ** H
+        return perp
