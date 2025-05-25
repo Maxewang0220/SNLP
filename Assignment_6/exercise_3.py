@@ -29,7 +29,14 @@ def make_vocab(corpus,top_n):
          top_n - int
   Output: Vocabulary - List[str]
   '''
-  pass
+  # Count the frequency of each word in the corpus
+  word_freq = Counter(word for sentence in corpus for word in sentence)
+
+  # Sort the words by frequency and take the top_n most common words
+  most_common_word_freq_pairs = word_freq.most_common(top_n)
+
+  return [word for word, _ in most_common_word_freq_pairs]
+
 
 def restrict_vocab(corpus,vocab):
   '''
@@ -38,13 +45,25 @@ def restrict_vocab(corpus,vocab):
          vocab  - List[str]
   Output: Vocabulary_restricted_corpus - List[List[str]]
   '''
-  pass
+  restricted_corpus = []
+
+  # Traverse each word in each sentence and replace it with <unk> if it is not in the vocabulary
+  for sentence in corpus:
+    restricted_sentence = [word if word in vocab else '<unk>' for word in sentence]
+    restricted_corpus.append(restricted_sentence)
+
+  return restricted_corpus
 
 def train_test_split(corpus, split=0.7):
   '''Splits the corpus using a 70:30 ratio. Do not randomize anything here. use the original order
   Input: List[List[str]]
   Output: List[List[str]],List[List[str]]'''
-  pass
+  split_index = int(len(corpus) * split)
+
+  train_corpus = corpus[:split_index]
+  test_corpus = corpus[split_index:]
+
+  return train_corpus, test_corpus
 
 
 class Interpolated_Model:
@@ -92,18 +111,47 @@ class Interpolated_Model:
           for i in range(len(tokens)-n+1):
               n_gram = tuple(tokens[i:i+n])
               n_grams.append(n_gram)
+
       return n_grams    
 
     def laplace_prob(self,ngram):
       '''returns the log proabability of an ngram. Adjust this function for Laplace Smoothing'''
-      pass
+      n = len(ngram)
+      # Frequency of the n-gram
+      count_ngram = self.train_counts[n][ngram]
+      # Frequency of the prior
+      prefix = ngram[:-1]
+      count_prefix = (self.train_counts[n - 1][prefix]
+                    if n > 1 else self.train_counts[0][()])
+
+      numerator = count_ngram + self.alpha
+      denominator = count_prefix + self.alpha * self.vocab_size
+
+      return math.log2(numerator / denominator)
 
     def interpolated_logprob(self,ngram):
       '''
       calculates the interpolated log probability of a given n-gram using the Laplace smoothed probabilities.
       '''
-      pass
+      total_logprob = 0.0
+
+      for i in range(1, self.order + 1):
+          sub = ngram[-i:]
+          total_logprob += self.interpolation_weight * self.laplace_prob(sub)
+
+      return total_logprob
 
     def perplexity(self):
       """ returns the perplexity of the language model for n-grams with n=n """
-      pass
+      total_logprob = 0.0
+      total_ngrams = 0
+
+      for ngrams in self.test_ngrams:
+          for ngram in ngrams:
+              total_logprob += self.interpolated_logprob(ngram)
+              total_ngrams += 1
+
+      # Perplexity = 2^(- avg log2 prob)
+      avg_logprob = total_logprob / total_ngrams
+
+      return 2 ** (-avg_logprob)
